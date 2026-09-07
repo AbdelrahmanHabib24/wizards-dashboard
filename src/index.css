@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+
+    /* Semantic Design Tokens matching Figma */
+    --color-background: #051424;
+    --color-surface: rgba(5, 20, 36, 0.8);
+    --color-surface-muted: #0D1C2D;
+    --color-text-primary: #D4E4FA;
+    --color-text-secondary: #CBC3D7;
+    --color-border: rgba(73, 68, 84, 0.3);
+    --color-accent: #D0BCFF;
+    --color-warning: #FFB95F;
+    --color-danger: #FFB4AB;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    --shadow-card: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 20, 36, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(73, 68, 84, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(208, 188, 255, 0.4);
+}
