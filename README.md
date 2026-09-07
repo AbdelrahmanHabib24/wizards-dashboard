@@ -114,7 +114,7 @@ The application uses the API's FirstName and LastName query parameters, with pag
 - **400ms Debounce**: Implemented via a custom `useDebounce` hook with an exact 400ms delay to keep input responsive while minimizing network traffic.
 - **Client-Side Pagination**: Implemented with 4 rows per page (`ITEMS_PER_PAGE = 4`), active page navigation, and automatic reset to page 1 on search change.
 - **Graceful Null Handling**: Missing firstName or lastName values are rendered using clear fallback values so the UI never displays `null null`.
-- **Native `<dialog>` Modal**: Utilizes the browser's native `<dialog>` element with `showModal()` and `close()` for built-in focus trapping, backdrop handling, and keyboard dismiss (`Escape`).
+- **Native `<dialog>` Modal**: Utilizes the browser's native `<dialog>` element with `showModal()` and `close()` for native modal behavior, backdrop handling, and Escape-to-close support.
 - **Static vs Dynamic Content**: Dashboard KPI and chart values are static, while wizard registry and dossier data are populated from the live API.
 
 ## Improvements With More Time
