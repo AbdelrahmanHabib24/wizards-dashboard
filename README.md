@@ -70,7 +70,7 @@ The application runs locally at `http://localhost:5173/`.
 
 ## Project Structure
 
-```
+```text
 wizards-dashboard/
 ├── src/
 │   ├── components/
