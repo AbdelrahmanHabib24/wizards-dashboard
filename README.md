@@ -2,9 +2,7 @@
 
 ## Overview
 
-A responsive frontend dashboard implementing the **Wizarding Registry** interface based on the provided Figma design.
-
-The application integrates with the public Wizard World API to display real wizard records and their associated elixirs, while the dashboard metrics and charts follow the provided design specification.
+A responsive frontend dashboard for managing wizard registry records and associated elixirs. The application integrates with the public Wizard World API to display real wizard data and elixir information.
 
 ## Tech Stack
 
@@ -19,28 +17,28 @@ The application integrates with the public Wizard World API to display real wiza
 ## Features
 
 - **Real Wizard World API Integration**  
-  Fetches real wizard records and elixir associations from the live API. No mock or fabricated wizard table data is used.
+  Fetches live wizard records and elixir associations directly from the public API without mock or fabricated table data.
 
 - **Debounced Wizard Search**  
-  Search input uses an exact **400ms debounce** to avoid unnecessary API requests while typing.
+  Search input uses an exact 400ms debounce to prevent redundant API requests while typing.
 
 - **First-Name and Last-Name Search**  
   Supports searching by wizard first name and last name using the API-supported parameters.
 
 - **Client-Side Pagination**  
-  Displays 4 rows per page to match the visible table area in the Figma design. Pagination resets to page 1 when the search query changes.
+  Displays 4 rows per page. Pagination resets to page 1 when the search query changes.
 
 - **Wizard Details Modal**  
-  Native HTML `<dialog>` modal displaying real wizard information, including registry ID, names, and associated elixirs.
+  Native HTML `<dialog>` modal displaying wizard information, including registry ID, names, and associated elixirs.
 
 - **Elixir Information**  
-  Displays elixir information in the registry table and full elixir details inside the wizard dossier modal.
+  Displays elixir counts and names in the registry table, and full elixir details in the wizard dossier modal.
 
 - **Loading, Empty & Error States**  
-  Provides clear UI states for loading, empty search results, empty API responses, and API errors with retry support.
+  Provides clear visual feedback for loading, empty search results, empty API responses, and API errors with retry support.
 
 - **Responsive Layout**  
-  Supports desktop, tablet, and mobile layouts while preserving the original design hierarchy and preventing page-level horizontal overflow.
+  Adapts seamlessly across desktop, tablet, and mobile viewports while preserving data hierarchy and table accessibility.
 
 ## Getting Started
 
@@ -58,12 +56,14 @@ npm install
 # Start development server
 npm run dev
 
-# Run lint
+# Run linting
 npm run lint
 
 # Build for production
 npm run build
 
+# Preview production build
+npm run preview
 ```
 
 The application runs locally at `http://localhost:5173/`.
@@ -75,25 +75,25 @@ wizards-dashboard/
 ├── src/
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Navbar.tsx        # Top navigation header & quick search
-│   │   │   └── Sidebar.tsx       # Side navigation bar & mobile drawer
+│   │   │   ├── Navbar.tsx            # Top navigation header & quick search
+│   │   │   └── Sidebar.tsx           # Side navigation bar & mobile drawer
 │   │   └── ui/
-│   │       ├── StatsCards.tsx    # KPI summary bento cards
-│   │       ├── Charts.tsx        # Registry Activity & Specialty Recharts
-│   │       ├── WizardsTable.tsx  # Master registry table with search & pagination
+│   │       ├── StatsCards.tsx        # KPI summary bento cards
+│   │       ├── Charts.tsx            # Registry Activity & Specialty Recharts
+│   │       ├── WizardsTable.tsx      # Master registry table with search & pagination
 │   │       └── WizardDetailModal.tsx # Member dossier dialog modal
 │   ├── hooks/
-│   │   ├── useDebounce.ts        # 400ms search debouncing hook
-│   │   └── useWizards.ts         # TanStack Query data fetching hook
+│   │   ├── useDebounce.ts            # 400ms search debouncing hook
+│   │   └── useWizards.ts             # TanStack Query data fetching hook
 │   ├── lib/
-│   │   └── api.ts                # Wizard World API client
+│   │   └── api.ts                    # Wizard World API client
 │   ├── data/
-│   │   └── dashboard.ts          # Static KPI & chart datasets from Figma
+│   │   └── dashboard.ts              # Static KPI and chart datasets
 │   ├── types/
-│   │   └── wizard.ts             # TypeScript interfaces for API models
-│   ├── App.tsx                   # Main application layout
-│   ├── main.tsx                  # React DOM entry point & QueryClient provider
-│   └── index.css                 # Global styling & Tailwind directives
+│   │   └── wizard.ts                 # TypeScript interfaces for API models
+│   ├── App.tsx                       # Main application layout
+│   ├── main.tsx                      # React DOM entry point & QueryClient provider
+│   └── index.css                     # Global styling & Tailwind directives
 ├── index.html
 ├── package.json
 ├── tailwind.config.js
@@ -102,19 +102,23 @@ wizards-dashboard/
 ```
 
 ## API
-Wizard registry data is fetched from the public **Wizard World API**:
+
+Wizard registry data is fetched from the public Wizard World API:
 - **Endpoint**: `https://wizard-world-api.herokuapp.com/Wizards`
 - **Supported Parameters**: `FirstName`, `LastName`
-- **Contract Characteristics**: The API accepts string prefix queries, is case-sensitive, and does not provide server-side pagination or generic search fields. All pagination is handled client-side over the API response.
+
+The application uses the API's FirstName and LastName query parameters, with pagination handled on the client side.
 
 ## Implementation Notes
-- **400ms Search Debounce**: Implemented via custom `useDebounce` hook to ensure user input is responsive without flooding the API with intermediate keystrokes.
-- **Client-Side Pagination**: Configured to 4 rows per page (`ITEMS_PER_PAGE = 4`) matching the Figma visible viewport. Next/Previous button boundaries and active page indicators are fully handled.
-- **Graceful Null Handling**: Missing `firstName` values in API records (such as Mrs Skower or Dr Ubbly) render cleanly as `(None)`. Missing last names render as `Unknown`. The UI never outputs `"null null"`.
-- **Native `<dialog>` Element**: The wizard dossier modal utilizes the browser's top-layer dialog API (`showModal()`, `close()`), ensuring native focus management, backdrop rendering, and keyboard accessibility.
-- **Static vs Dynamic Content**: As specified in the Figma task, the top KPI counters and chart statistics are static design assets, while the Master Wizard Registry table and Member Dossier are dynamic, populated exclusively with live API data.
+
+- **400ms Debounce**: Implemented via a custom `useDebounce` hook with an exact 400ms delay to keep input responsive while minimizing network traffic.
+- **Client-Side Pagination**: Implemented with 4 rows per page (`ITEMS_PER_PAGE = 4`), active page navigation, and automatic reset to page 1 on search change.
+- **Graceful Null Handling**: Missing firstName or lastName values are rendered using clear fallback values so the UI never displays `null null`.
+- **Native `<dialog>` Modal**: Utilizes the browser's native `<dialog>` element with `showModal()` and `close()` for built-in focus trapping, backdrop handling, and keyboard dismiss (`Escape`).
+- **Static vs Dynamic Content**: Dashboard KPI and chart values are static, while wizard registry and dossier data are populated from the live API.
 
 ## Improvements With More Time
-1. **Automated End-to-End Tests**: Add Playwright or Vitest component tests for search, pagination, and modal flows.
+
+1. **Automated Tests**: Add end-to-end and component tests for search, pagination, and modal flows.
 2. **Offline Support**: Integrate service worker caching for offline registry browsing.
-3. **Advanced Filtering**: Add filter controls for elixir difficulty and inventory counts if supported by additional API endpoints.
+3. **Advanced Filtering**: Add filter controls for elixir count or difficulty if supported by additional API endpoints.
